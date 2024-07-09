@@ -12,9 +12,7 @@ export enum State {
 
 export type SectionEntry = {
     keyStartOffset: number,
-    keyEndOffset: number,
     valueStartOffset: number,
-    valueEndOffset: number,
     key: string,
     value: string,
 }

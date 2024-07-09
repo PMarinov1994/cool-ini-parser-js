@@ -1,10 +1,13 @@
 import { parseInitFromString } from "./parser";
 import { Section } from "./types";
 
-const testString = `
+const testString =
+`[ss]
+k=v
+
 
 [test:section] ; Comment
-  param=val
+param=val
 param=value
 param2 = value ; Example comment
 
@@ -27,6 +30,9 @@ param3 =
 key  =       value
 
    
+
+ke = 
+  val
 `;
 
 const config = parseInitFromString(testString);

@@ -5,7 +5,7 @@
         "declaration": true,
         "outDir": "./dist",
         "strict": true,
-        "rootDir": "src",
+        "rootDirs": ["src", "tests"],
         "sourceMap": true,
     }
 }

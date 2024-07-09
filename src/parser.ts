@@ -3,8 +3,8 @@ import { State, Section, SectionEntry, Configuration } from "./types"
 
 const SYMBOL_SECTION_START = '[';
 const SYMBOL_SECTION_END = ']';
-const SYMBOL_KEY_VALUE_SEPARATOR = '=';
-const SYMBOL_COMMENT = ';';
+const SYMBOL_KEY_VALUE_SEPARATOR = ['=', ':'];
+const SYMBOL_COMMENT = [';', '#'];
 
 const TAB_TO_SPACE_SIZE = 2;
 const MIN_VALUE_INDENTATION = 2;
@@ -24,10 +24,7 @@ export const parseInitFromString = (content: string): Configuration => {
 
     const sections = _parseInitFromString(content);
 
-    return {
-        sections: sections
-    };
-    
+    return { sections: sections };
 }
 
 const _parseInitFromString = (content: string): Section[] => {
@@ -39,16 +36,14 @@ const _parseInitFromString = (content: string): Section[] => {
     let currSection: Section | undefined = undefined;
     let currSectionEntry: SectionEntry | undefined = undefined;
 
-    console.log("<Starting ini parser>")
+    let isMultiLineValue = false; // Tracks if the value is multilined for validating the indentation
+    let hasValueStarted = false; // Skip the spaces and tabs before the value
     for (let i = 0; i < content.length; i++) {
 
         let currChar = content[i];
 
-        // For debugging
-        // console.log(currChar)
-
         // While we are in a comment, we ignore any other symbols until we exit the comment parsing
-        if (currChar === SYMBOL_COMMENT) {
+        if (SYMBOL_COMMENT.includes(currChar)) {
             do {
                 // Trap everything untill a new line (end of comment)
                 // Once a new line is reached, pass it the parser
@@ -57,13 +52,17 @@ const _parseInitFromString = (content: string): Section[] => {
         }
 
         switch (currState as State) {
-            case State.WAIT_SECTION_START:
+            case State.WAIT_SECTION_START: {
                 if (currChar !== SYMBOL_SECTION_START)
                     throw new Error(`Error: Invalid section start symbol '${currChar}'!`);
 
+                const prevChar: string | undefined = i == 0 ? undefined : content[i - 1];
+                if (prevChar !== undefined && prevChar !== '\n') {
+                    throw new Error(`Error: Section declaration cannot be indented!`);
+                }
+
                 if (currSection !== undefined) {
                     if (currSectionEntry !== undefined) {
-                        currSectionEntry.valueEndOffset = i - 1;
                         currSection.entries.push(currSectionEntry);
                         currSectionEntry = undefined;
                     }
@@ -83,8 +82,8 @@ const _parseInitFromString = (content: string): Section[] => {
                 currState = State.WAIT_SECTION_END;
 
                 break;
-
-            case State.WAIT_SECTION_END:
+            }
+            case State.WAIT_SECTION_END: {
                 if (currSection === undefined)
                     throw new Error("WrongStateError");
 
@@ -98,67 +97,80 @@ const _parseInitFromString = (content: string): Section[] => {
                     currSection.name += currChar;
                 }
                 break;
-
-            case State.WAIT_SECTION_END_NEWLINE:
+            }
+            case State.WAIT_SECTION_END_NEWLINE: {
                 if (currChar === '\n') {
                     currState = State.NEW_LINE_START;
                 } else if (!/\s/.test(currChar)) {
                     throw new Error("Error: After section end, no symbols are allowed")
                 }
                 break;
-
-            case State.WAIT_KEY_START:
+            }
+            case State.WAIT_KEY_START: {
                 if (currSection === undefined)
                     throw new Error("WrongStateError");
 
+                const prevChar = content[i - 1];
+                if (prevChar !== '\n') {
+                    throw new Error(`Error: Key declaration cannot be indented!`);
+                }
+
                 if (currSectionEntry !== undefined) {
-                    currSectionEntry.valueEndOffset = i - 1;
                     currSection.entries.push(currSectionEntry);
                     currSectionEntry = undefined;
                 }
 
+                hasValueStarted = false; // reset the value started flag
                 currSectionEntry = {
                     keyStartOffset: i,
-                    keyEndOffset: -1,
                     valueStartOffset: -1,
-                    valueEndOffset: -1,
                     key: String(currChar),
                     value: "",
                 };
                 currState = State.WAIT_KEY_END;
 
                 break;
-
-            case State.WAIT_KEY_END:
+            }
+            case State.WAIT_KEY_END: {
                 if (currSectionEntry === undefined)
                     throw new Error("WrongStateError");
 
-                if (currChar === SYMBOL_KEY_VALUE_SEPARATOR) {
+                if (SYMBOL_KEY_VALUE_SEPARATOR.includes(currChar)) {
                     currSectionEntry.key = currSectionEntry.key.trimEnd();
-                    currSectionEntry.keyEndOffset = i - 1;
 
                     currState = State.CONSUME_VALUE;
                 } else {
                     currSectionEntry.key += currChar;
                 }
                 break;
-
-            case State.CONSUME_VALUE:
+            }
+            case State.CONSUME_VALUE: {
                 if (currSectionEntry === undefined)
                     throw new Error("WrongStateError");
 
-                if (currSectionEntry.valueStartOffset === -1) {
+                // Ignore leading whitespaces
+                if (!hasValueStarted && currChar !== ' ' && currChar !== '\t') {
                     currSectionEntry.valueStartOffset = i;
+                    hasValueStarted = true;
+                }
+
+                // Validate the indentation of multiline values
+                if (isMultiLineValue) {
+                    if (currChar !== ' ') {
+                        throw new Error("Erro: Multiline value needs to be indeted with atleast 2 spaces.");
+                    } else {
+                        isMultiLineValue = false;
+                    }
                 }
 
                 if (currChar === '\n') {
                     currState = State.NEW_LINE_START;
-                } else {
+                } else if (hasValueStarted) {
                     currSectionEntry.value += currChar;
                 }
                 break;
-
-            case State.NEW_LINE_START:
+            }
+            case State.NEW_LINE_START: {
                 if (currChar === SYMBOL_SECTION_START) {
                     i--; // Rowback the current symbol
                     currState = State.WAIT_SECTION_START;
@@ -174,14 +186,14 @@ const _parseInitFromString = (content: string): Section[] => {
 
                 } else if (currSectionEntry !== undefined && (currChar === ' ' || currChar === '\t')) {
                     currSectionEntry.value += '\n';
+                    isMultiLineValue = true;
                     currState = State.CONSUME_VALUE;
                 } else if (currChar === '\n') {
                     // Loop back to here
-                } else {
-                    // throw new Error(`Error: Unexpected value after value new line: ${currChar}`);
                 }
 
                 break;
+            }
         } // switch
     } // for
 
@@ -195,6 +207,7 @@ const _parseInitFromString = (content: string): Section[] => {
             currSection.entries.push(currSectionEntry);
         }
 
+        currSection.endOffset = content.length;
         sections.push(currSection);
     }
 
@@ -206,6 +219,5 @@ const _parseInitFromString = (content: string): Section[] => {
         }
     }
 
-    console.log("\n<Process FINISHED>");
     return sections;
 }
