@@ -1,8 +1,18 @@
+import { modifyConfigurationSectionKey } from "./modifier";
 import { parseInitFromString } from "./parser";
 import { Section } from "./types";
 
-const testString =
-`;Comment`;
+const testString = `\
+[General]
+appName            =          SimpleApp
+  SimpleApp
+  SimpleApp
+
+
+    
+
+other = value`;
+
 
 const config = parseInitFromString(testString);
 for (var section of config.sections) {
@@ -12,3 +22,10 @@ for (var section of config.sections) {
         console.log(`-> ${entry.key} = ${entry.value.replaceAll('\n', "\\n")}`);
     }
 }
+
+
+const newContent = modifyConfigurationSectionKey(config, "General", "appName", "value");
+
+console.log("--------");
+console.log(newContent);
+console.log("--------");

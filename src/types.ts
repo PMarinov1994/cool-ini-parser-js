@@ -3,6 +3,8 @@ export type SectionEntry = {
     valueStartOffset: number,
     key: string,
     value: string,
+    rawValue: string,
+    delimiterOffset: number,
 }
 
 
@@ -15,6 +17,7 @@ export type Section = {
 
 
 export type Configuration = {
+    indentSymbol: string,
     content: string,
     sections: Section[],
 }

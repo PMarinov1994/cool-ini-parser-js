@@ -28,7 +28,7 @@ const INVALID_PARSE_END_STATE: State[] = [
     State.WAIT_SECTION_END
 ]
 
-const _parseInitFromString = (content: string): Section[] => {
+const _parseInitFromString = (content: string): Configuration => {
 
     const sections: Section[] = [];
 
@@ -40,6 +40,7 @@ const _parseInitFromString = (content: string): Section[] => {
     let hasValueStarted = false; // Skip the spaces and tabs before the value
     let isWaitingForValue = false;
 
+    let lastIndentSymbol = ' '; //
     let newLineIndentation = 0; // Whitespaces used to indent the keys or values
     let currKeyIndentation = 0;
     let currSectionIndentation = 0;
@@ -128,8 +129,10 @@ const _parseInitFromString = (content: string): Section[] => {
                 currSectionEntry = {
                     keyStartOffset: i,
                     valueStartOffset: -1,
+                    delimiterOffset: -1,
                     key: String(currChar),
                     value: "",
+                    rawValue: "",
                 };
 
                 currState = State.WAIT_KEY_END;
@@ -140,6 +143,7 @@ const _parseInitFromString = (content: string): Section[] => {
                     throw new Error("WrongStateError");
 
                 if (SYMBOL_KEY_VALUE_SEPARATOR.includes(currChar)) {
+                    currSectionEntry.delimiterOffset = i;
                     currSectionEntry.key = currSectionEntry.key.trimEnd();
                     currState = State.CONSUME_VALUE;
 
@@ -165,7 +169,7 @@ const _parseInitFromString = (content: string): Section[] => {
                 }
 
                 if (hasValueStarted) {
-                    currSectionEntry.value += currChar;
+                    currSectionEntry.rawValue += currChar;
                 }
 
                 if (currChar === '\n') {
@@ -177,6 +181,7 @@ const _parseInitFromString = (content: string): Section[] => {
                 // Count the indentation
                 if (currChar === ' ' || currChar === '\t') {
                     newLineIndentation += currChar === ' ' ? 1 : TAB_TO_SPACE_SIZE;
+                    lastIndentSymbol = currChar;
 
                 } else if (currChar === SYMBOL_SECTION_START) {
                     i--; // Rowback the current symbol
@@ -190,8 +195,14 @@ const _parseInitFromString = (content: string): Section[] => {
                     i--; // Rowback the current symbol
 
                     isWaitingForValue = false;
-                    newLineIndentation = 0;
                     currState = State.CONSUME_VALUE;
+
+                    // If a new value was started, we append the indentation
+                    if (currSectionEntry && hasValueStarted) {
+                        currSectionEntry.rawValue += lastIndentSymbol.repeat(lastIndentSymbol === ' ' ?
+                            newLineIndentation : newLineIndentation / TAB_TO_SPACE_SIZE);
+                    }
+                    newLineIndentation = 0;
 
                 } else if (/\S/.test(currChar)) {
                     i--; // Rowback the current symbol
@@ -230,22 +241,21 @@ const _parseInitFromString = (content: string): Section[] => {
 
     for (var section of sections) {
         for (var entry of section.entries) {
-            const values = entry.value.split('\n');
+            const values = entry.rawValue.split('\n');
             // Cleanup the values
             entry.value = values.filter(v => v.trim().length > 0).map(v => v.trim()).join('\n');
         }
     }
 
-    return sections;
+    return {
+        indentSymbol: lastIndentSymbol,
+        content: content,
+        sections: sections,
+    };
 }
 
 
 export const parseInitFromString = (content: string): Configuration => {
 
-    const sections = _parseInitFromString(content);
-
-    return {
-        content: content,
-        sections: sections
-    };
+    return _parseInitFromString(content);
 }
