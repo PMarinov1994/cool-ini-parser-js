@@ -6,11 +6,11 @@ describe('testing parser file', () => {
     * TEST
     */
     test('normal single section 1', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
-key = value`
-        )).toStrictEqual<Configuration>({
+key = value`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -33,12 +33,12 @@ key = value`
     * TEST
     */
     test('normal single section 2', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value
-key2 = value2`
-        )).toStrictEqual<Configuration>({
+key2 = value2`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -68,14 +68,14 @@ key2 = value2`
     * TEST
     */
     test('normal single section 3', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value
 
 
-`
-        )).toStrictEqual<Configuration>({
+`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -99,13 +99,13 @@ key = value
 * TEST
 */
     test('normal single section 4', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value   
 
-`
-        )).toStrictEqual<Configuration>({
+`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -130,14 +130,14 @@ key = value
     * TEST
     */
     test('normal double section 1', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value
 
 [section2]
-key = value`
-        )).toStrictEqual<Configuration>({
+key = value`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -173,8 +173,7 @@ key = value`
     * TEST
     */
     test('normal triple section 1', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value
 
@@ -182,8 +181,9 @@ key = value
 key1 = value1
 
 [section3]
-key2 = value2`
-        )).toStrictEqual<Configuration>({
+key2 = value2`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -233,13 +233,13 @@ key2 = value2`
     * TEST
     */
     test('multiline single section 1', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value
       value2
-      value3`
-        )).toStrictEqual<Configuration>({
+      value3`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -263,13 +263,13 @@ key = value
     * TEST
     */
     test('multiline single section 2', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value
  value2
-`
-        )).toStrictEqual<Configuration>({
+`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -293,13 +293,13 @@ key = value
     * TEST
     */
     test('multiline single section 3', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value
 value2
-`
-        )).toStrictEqual<Configuration>({
+`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -329,13 +329,13 @@ value2
     * TEST
     */
     test('multiline single section 4', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value
  value2 = val
-`
-        )).toStrictEqual<Configuration>({
+`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -359,14 +359,14 @@ key = value
     * TEST
     */
     test('multiline single section 5', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value
  value2 = val
     key = lll
-`
-        )).toStrictEqual<Configuration>({
+`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -390,8 +390,7 @@ key = value
     * TEST
     */
     test('multiline double selection 1', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value
  value2 = val
@@ -400,8 +399,9 @@ key = value
    key=val
    key2 = value
   key3 = sss
-`
-        )).toStrictEqual<Configuration>({
+`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -450,8 +450,7 @@ key = value
     * TEST
     */
     test('multiline double selection 2', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key = value
  value2 = val
@@ -465,8 +464,9 @@ key = value
     key=val
 key2=value
   key3=vvvv
-`
-        )).toStrictEqual<Configuration>({
+`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -534,12 +534,12 @@ key2=value
     * TEST
     */
     test('empty value 1', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key
-key1 = value`
-        )).toStrictEqual<Configuration>({
+key1 = value`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -569,12 +569,12 @@ key1 = value`
     * TEST
     */
     test('empty value 2', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
 key =
-key1 = value`
-        )).toStrictEqual<Configuration>({
+key1 = value`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -604,11 +604,11 @@ key1 = value`
     * TEST
     */
     test('EOF at comment 1', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [section]
-; Comment`
-        )).toStrictEqual<Configuration>({
+; Comment`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",
@@ -626,8 +626,7 @@ key1 = value`
     * TEST
     */
     test('THE BIG ONE', () => {
-        expect(parseInitFromString(
-            `\
+        const content = `\
 [Simple Values]
 key=value
 spaces in keys=allowed
@@ -668,8 +667,9 @@ empty string value here =
             long as they are indented
             deeper than the first line
             of a value
-        # Did I mention we can indent comments, too?`
-        )).toStrictEqual<Configuration>({
+        # Did I mention we can indent comments, too?`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "Simple Values",
@@ -873,9 +873,9 @@ empty string value here =
     * TEST
     */
     test('Verify no error: only comment 1', () => {
-        expect(parseInitFromString(
-            `; Comment`
-        )).toStrictEqual<Configuration>({
+        const content = `; Comment`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: []
         });
     });
@@ -885,9 +885,9 @@ empty string value here =
     * TEST
     */
     test('Verify no error: only comment 2', () => {
-        expect(parseInitFromString(
-            `   ; Comment`
-        )).toStrictEqual<Configuration>({
+        const content = `   ; Comment`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: []
         });
     });
@@ -897,9 +897,9 @@ empty string value here =
     * TEST
     */
     test('Verify no error: only comment 3', () => {
-        expect(parseInitFromString(
-            `\n   \n; Comment`
-        )).toStrictEqual<Configuration>({
+        const content = `\n   \n; Comment`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: []
         });
     });
@@ -909,9 +909,9 @@ empty string value here =
     * TEST
     */
     test('Verify no error: empty string', () => {
-        expect(parseInitFromString(
-            ``
-        )).toStrictEqual<Configuration>({
+        const content = ``;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: []
         });
     });
@@ -921,9 +921,9 @@ empty string value here =
     * TEST
     */
     test('Verify no error: comment after sections end', () => {
-        expect(parseInitFromString(
-            `[section]      ; Comment`
-        )).toStrictEqual<Configuration>({
+        const content = `[section]      ; Comment`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            content: content,
             sections: [
                 {
                     name: "section",

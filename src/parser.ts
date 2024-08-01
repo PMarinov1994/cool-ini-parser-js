@@ -1,4 +1,4 @@
-import { State, Section, SectionEntry, Configuration } from "./types"
+import { Section, SectionEntry, Configuration } from "./types"
 
 
 const SYMBOL_SECTION_START = '[';
@@ -7,25 +7,26 @@ const SYMBOL_KEY_VALUE_SEPARATOR = ['=', ':'];
 const SYMBOL_COMMENT = [';', '#'];
 
 const TAB_TO_SPACE_SIZE = 2;
-const MIN_VALUE_INDENTATION = 2;
 
 const SECTION_NAME_INVALID_SYMBOLS = [
     '\n',
     '\r'
 ]
 
+enum State {
+    WAIT_SECTION_START,
+    WAIT_SECTION_END,
+    WAIT_SECTION_END_NEWLINE,
+    WAIT_KEY_START,
+    WAIT_KEY_END,
+    CONSUME_VALUE,
+    NEW_LINE_START,
+}
 
 const INVALID_PARSE_END_STATE: State[] = [
     State.WAIT_KEY_END,
     State.WAIT_SECTION_END
 ]
-
-export const parseInitFromString = (content: string): Configuration => {
-
-    const sections = _parseInitFromString(content);
-
-    return { sections: sections };
-}
 
 const _parseInitFromString = (content: string): Section[] => {
 
@@ -236,4 +237,15 @@ const _parseInitFromString = (content: string): Section[] => {
     }
 
     return sections;
+}
+
+
+export const parseInitFromString = (content: string): Configuration => {
+
+    const sections = _parseInitFromString(content);
+
+    return {
+        content: content,
+        sections: sections
+    };
 }
