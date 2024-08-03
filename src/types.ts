@@ -1,6 +1,7 @@
 export type SectionEntry = {
     keyStartOffset: number,
     valueStartOffset: number,
+    valueEndOffset: number,
     key: string,
     value: string,
     rawValue: string,

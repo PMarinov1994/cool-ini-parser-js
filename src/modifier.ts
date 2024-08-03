@@ -50,6 +50,13 @@ export const modifyConfigurationSectionKeyByIndex = (config: Configuration, sect
         valuePrefix = NO_VALUE_PADDING;
     }
 
+    let valueEndOffset = key.valueEndOffset;
+    if (valueEndOffset === -1) {
+        valueEndOffset = valueStartOffset; // We DO NOT need +1 because it is already added in the startOffset
+    } else {
+        valueEndOffset += 1; // +1 since the substring includes the characters up to, but not including
+    }
+
     const newValueLinesArr = newValue.split('\n');
     if (newValueLinesArr.length > 1) {
 
@@ -95,7 +102,7 @@ export const modifyConfigurationSectionKeyByIndex = (config: Configuration, sect
     }
 
     const before = content.substring(0, valueStartOffset);
-    const after = content.substring(valueStartOffset + key.rawValue.length);
+    const after = content.substring(valueEndOffset);
 
     if (key.rawValue.endsWith('\n') && !newValue.endsWith('\n')) {
         newValue += '\n';

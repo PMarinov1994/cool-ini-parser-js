@@ -26,6 +26,7 @@ key = value
                             value: "value\nvalue2",
                             rawValue: "value\n\t\tvalue2",
                             valueStartOffset: 16,
+                            valueEndOffset: 29,
                         }
                     ]
                 }
@@ -58,6 +59,7 @@ key = value
                             value: "value",
                             rawValue: "value\n",
                             valueStartOffset: 17,
+                            valueEndOffset: 22,
                         },
                         {
                             key: "key2",
@@ -66,6 +68,7 @@ key = value
                             value: "value2",
                             rawValue: "value2",
                             valueStartOffset: 31,
+                            valueEndOffset: 36,
                         }
                     ]
                 }
@@ -98,6 +101,7 @@ key = value
                             value: "value",
                             rawValue: "value\n",
                             valueStartOffset: 18,
+                            valueEndOffset: 23,
                         },
                         {
                             key: "key2",
@@ -106,6 +110,7 @@ key = value
                             value: "value2",
                             rawValue: "value2",
                             valueStartOffset: 32,
+                            valueEndOffset: 37,
                         }
                     ]
                 }
@@ -138,6 +143,7 @@ key = value
                             value: "value",
                             rawValue: "value\n",
                             valueStartOffset: 17,
+                            valueEndOffset: 22,
                         },
                         {
                             key: "key2",
@@ -146,6 +152,7 @@ key = value
                             value: "value2",
                             rawValue: "value2",
                             valueStartOffset: 32,
+                            valueEndOffset: 37,
                         }
                     ]
                 }
@@ -176,6 +183,7 @@ key = value`;
                             value: "value",
                             rawValue: "value",
                             valueStartOffset: 16,
+                            valueEndOffset: 20,
                         }
                     ]
                 }
@@ -207,6 +215,7 @@ key2 = value2`;
                             value: "value",
                             rawValue: "value\n",
                             valueStartOffset: 16,
+                            valueEndOffset: 21,
                         },
                         {
                             key: "key2",
@@ -215,6 +224,7 @@ key2 = value2`;
                             value: "value2",
                             rawValue: "value2",
                             valueStartOffset: 29,
+                            valueEndOffset: 34,
                         }
                     ]
                 }
@@ -249,6 +259,7 @@ key = value
                             value: "value",
                             rawValue: "value\n",
                             valueStartOffset: 16,
+                            valueEndOffset: 21,
                         }
                     ]
                 }
@@ -282,6 +293,184 @@ key = value
                             value: "value",
                             rawValue: "value   \n",
                             valueStartOffset: 16,
+                            valueEndOffset: 24,
+                        }
+                    ]
+                }
+            ]
+        })
+    })
+
+
+    /*
+    * TEST
+    */
+    test('normal single section 5', () => {
+        const content = `\
+[section]
+    key1 = value1
+        key2 = value2
+key3 = value3`;
+
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            indentSymbol: " ",
+            content: content,
+            sections: [
+                {
+                    name: "section",
+                    startOffset: 0,
+                    endOffset: 63,
+                    entries: [
+                        {
+                            key: "key1",
+                            delimiterOffset: 19,
+                            keyStartOffset: 14,
+                            value: "value1\nkey2 = value2",
+                            rawValue: "value1\n        key2 = value2\n",
+                            valueStartOffset: 21,
+                            valueEndOffset: 49,
+                        },
+                        {
+                            key: "key3",
+                            delimiterOffset: 55,
+                            keyStartOffset: 50,
+                            value: "value3",
+                            rawValue: "value3",
+                            valueStartOffset: 57,
+                            valueEndOffset: 62,
+                        }
+                    ]
+                }
+            ]
+        })
+    })
+
+
+
+    /*
+    * TEST
+    */
+    test('Value with comment 1', () => {
+        const content = `\
+[section]
+key = value # Comment`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            indentSymbol: " ",
+            content: content,
+            sections: [
+                {
+                    name: "section",
+                    startOffset: 0,
+                    endOffset: 31,
+                    entries: [
+                        {
+                            key: "key",
+                            delimiterOffset: 14,
+                            keyStartOffset: 10,
+                            value: "value",
+                            rawValue: "value ",
+                            valueStartOffset: 16,
+                            valueEndOffset: 21,
+                        }
+                    ]
+                }
+            ]
+        })
+    })
+
+
+
+    /*
+    * TEST
+    */
+    test('Value with comment 2', () => {
+        const content = `\
+[section]
+key = value ; Comment`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            indentSymbol: " ",
+            content: content,
+            sections: [
+                {
+                    name: "section",
+                    startOffset: 0,
+                    endOffset: 31,
+                    entries: [
+                        {
+                            key: "key",
+                            delimiterOffset: 14,
+                            keyStartOffset: 10,
+                            value: "value",
+                            rawValue: "value ",
+                            valueStartOffset: 16,
+                            valueEndOffset: 21,
+                        }
+                    ]
+                }
+            ]
+        })
+    })
+
+
+
+    /*
+    * TEST
+    */
+    test('Value with comment 3', () => {
+        const content = `\
+[section]
+key = value ; Comment # Comment`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            indentSymbol: " ",
+            content: content,
+            sections: [
+                {
+                    name: "section",
+                    startOffset: 0,
+                    endOffset: 41,
+                    entries: [
+                        {
+                            key: "key",
+                            delimiterOffset: 14,
+                            keyStartOffset: 10,
+                            value: "value",
+                            rawValue: "value ",
+                            valueStartOffset: 16,
+                            valueEndOffset: 21,
+                        }
+                    ]
+                }
+            ]
+        })
+    })
+
+
+    /*
+    * TEST
+    */
+    test('Value with comment 4', () => {
+        const content = `\
+[section]
+key = 
+    ; Comment
+    value # Comment`;
+        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+            indentSymbol: " ",
+            content: content,
+            sections: [
+                {
+                    name: "section",
+                    startOffset: 0,
+                    endOffset: 50,
+                    entries: [
+                        {
+                            key: "key",
+                            delimiterOffset: 14,
+                            keyStartOffset: 10,
+                            value: "value",
+                            rawValue: "value ",
+                            valueStartOffset: 35,
+                            valueEndOffset: 40,
                         }
                     ]
                 }
@@ -317,6 +506,7 @@ key = value`;
                             value: "value",
                             rawValue: "value\n",
                             valueStartOffset: 16,
+                            valueEndOffset: 21,
                         }
                     ]
                 },
@@ -332,6 +522,7 @@ key = value`;
                             value: "value",
                             rawValue: "value",
                             valueStartOffset: 40,
+                            valueEndOffset: 44,
                         }
                     ]
                 },
@@ -368,6 +559,7 @@ key2 = value2`;
                             value: "value",
                             rawValue: "value\n",
                             valueStartOffset: 16,
+                            valueEndOffset: 21,
                         }
                     ]
                 },
@@ -383,6 +575,7 @@ key2 = value2`;
                             value: "value1",
                             rawValue: "value1\n",
                             valueStartOffset: 41,
+                            valueEndOffset: 47,
                         }
                     ]
                 },
@@ -398,6 +591,7 @@ key2 = value2`;
                             value: "value2",
                             rawValue: "value2",
                             valueStartOffset: 67,
+                            valueEndOffset: 72,
                         }
                     ]
                 },
@@ -431,6 +625,7 @@ key = value
                             value: "value\nvalue2\nvalue3",
                             rawValue: "value\n      value2\n      value3",
                             valueStartOffset: 16,
+                            valueEndOffset: 46,
                         }
                     ]
                 }
@@ -464,6 +659,7 @@ key = value
                             value: "value\nvalue2",
                             rawValue: "value\n value2\n",
                             valueStartOffset: 16,
+                            valueEndOffset: 29,
                         }
                     ]
                 }
@@ -497,6 +693,7 @@ value2
                             value: "value",
                             rawValue: "value\n",
                             valueStartOffset: 16,
+                            valueEndOffset: 21,
                         },
                         {
                             key: "value2",
@@ -505,6 +702,7 @@ value2
                             value: "",
                             rawValue: "",
                             valueStartOffset: -1,
+                            valueEndOffset: -1,
                         }
                     ]
                 }
@@ -538,6 +736,7 @@ key = value
                             value: "value\nvalue2 = val",
                             rawValue: "value\n value2 = val\n",
                             valueStartOffset: 16,
+                            valueEndOffset: 35,
                         }
                     ]
                 }
@@ -572,6 +771,7 @@ key = value
                             value: "value\nvalue2 = val\nkey = lll",
                             rawValue: "value\n value2 = val\n    key = lll\n",
                             valueStartOffset: 16,
+                            valueEndOffset: 49,
                         }
                     ]
                 }
@@ -610,6 +810,7 @@ key = value
                             value: "value\nvalue2 = val",
                             rawValue: "value\n value2 = val\n",
                             valueStartOffset: 16,
+                            valueEndOffset: 35,
                         }
                     ]
                 },
@@ -625,6 +826,7 @@ key = value
                             value: "val",
                             rawValue: "val\n",
                             valueStartOffset: 55,
+                            valueEndOffset: 58,
                         },
                         {
                             key: "key2",
@@ -633,6 +835,7 @@ key = value
                             value: "value",
                             rawValue: "value\n",
                             valueStartOffset: 69,
+                            valueEndOffset: 74,
                         },
                         {
                             key: "key3",
@@ -641,6 +844,7 @@ key = value
                             value: "sss",
                             rawValue: "sss\n",
                             valueStartOffset: 84,
+                            valueEndOffset: 87,
                         }
                     ]
                 }
@@ -684,6 +888,7 @@ key2=value
                             value: "value\nvalue2 = val",
                             rawValue: "value\n value2 = val\n",
                             valueStartOffset: 16,
+                            valueEndOffset: 35,
                         }
                     ]
                 },
@@ -699,6 +904,7 @@ key2=value
                             value: "val",
                             rawValue: "val\n",
                             valueStartOffset: 55,
+                            valueEndOffset: 58,
                         },
                         {
                             key: "key2",
@@ -707,6 +913,7 @@ key2=value
                             value: "value",
                             rawValue: "value\n",
                             valueStartOffset: 69,
+                            valueEndOffset: 74,
                         },
                         {
                             key: "key3",
@@ -715,6 +922,7 @@ key2=value
                             value: "sss",
                             rawValue: "sss\n",
                             valueStartOffset: 84,
+                            valueEndOffset: 87,
                         }
                     ]
                 },
@@ -730,6 +938,7 @@ key2=value
                             value: "val",
                             rawValue: "val\n",
                             valueStartOffset: 116,
+                            valueEndOffset: 119,
                         },
                         {
                             key: "key2",
@@ -738,6 +947,7 @@ key2=value
                             value: "value\nkey3=vvvv",
                             rawValue: "value\n  key3=vvvv\n",
                             valueStartOffset: 125,
+                            valueEndOffset: 142,
                         }
                     ]
                 }
@@ -770,6 +980,7 @@ key1 = value`;
                             value: "",
                             rawValue: "",
                             valueStartOffset: -1,
+                            valueEndOffset: -1,
                         },
                         {
                             key: "key1",
@@ -778,6 +989,7 @@ key1 = value`;
                             value: "value",
                             rawValue: "value",
                             valueStartOffset: 21,
+                            valueEndOffset: 25,
                         }
                     ]
                 }
@@ -810,6 +1022,7 @@ key1 = value`;
                             value: "",
                             rawValue: "",
                             valueStartOffset: -1,
+                            valueEndOffset: -1,
                         },
                         {
                             key: "key1",
@@ -818,6 +1031,7 @@ key1 = value`;
                             value: "value",
                             rawValue: "value",
                             valueStartOffset: 23,
+                            valueEndOffset: 27,
                         }
                     ]
                 }
@@ -910,7 +1124,8 @@ empty string value here =
                             keyStartOffset: 16,
                             value: "value",
                             rawValue: "value\n",
-                            valueStartOffset: 20
+                            valueStartOffset: 20,
+                            valueEndOffset: 25,
                         },
                         {
                             key: "spaces in keys",
@@ -918,7 +1133,8 @@ empty string value here =
                             keyStartOffset: 26,
                             value: "allowed",
                             rawValue: "allowed\n",
-                            valueStartOffset: 41
+                            valueStartOffset: 41,
+                            valueEndOffset: 48,
                         },
                         {
                             key: "spaces in values",
@@ -926,7 +1142,8 @@ empty string value here =
                             keyStartOffset: 49,
                             value: "allowed as well",
                             rawValue: "allowed as well\n",
-                            valueStartOffset: 66
+                            valueStartOffset: 66,
+                            valueEndOffset: 81,
                         },
                         {
                             key: "spaces around the delimiter",
@@ -934,7 +1151,8 @@ empty string value here =
                             keyStartOffset: 82,
                             value: "obviously",
                             rawValue: "obviously\n",
-                            valueStartOffset: 112
+                            valueStartOffset: 112,
+                            valueEndOffset: 121,
                         },
                         {
                             key: "you can also use",
@@ -942,7 +1160,8 @@ empty string value here =
                             keyStartOffset: 122,
                             value: "to delimit keys from values",
                             rawValue: "to delimit keys from values\n",
-                            valueStartOffset: 141
+                            valueStartOffset: 141,
+                            valueEndOffset: 168,
                         }
                     ]
                 },
@@ -957,7 +1176,8 @@ empty string value here =
                             keyStartOffset: 195,
                             value: "1000000",
                             rawValue: "1000000\n",
-                            valueStartOffset: 213
+                            valueStartOffset: 213,
+                            valueEndOffset: 220,
                         },
                         {
                             key: "or this",
@@ -965,7 +1185,8 @@ empty string value here =
                             keyStartOffset: 221,
                             value: "3.14159265359",
                             rawValue: "3.14159265359\n",
-                            valueStartOffset: 230
+                            valueStartOffset: 230,
+                            valueEndOffset: 243,
                         },
                         {
                             key: "are they treated as numbers?",
@@ -973,7 +1194,8 @@ empty string value here =
                             keyStartOffset: 244,
                             value: "no",
                             rawValue: "no\n",
-                            valueStartOffset: 275
+                            valueStartOffset: 275,
+                            valueEndOffset: 277,
                         },
                         {
                             key: "integers, floats and booleans are held as",
@@ -981,7 +1203,8 @@ empty string value here =
                             keyStartOffset: 278,
                             value: "strings",
                             rawValue: "strings\n",
-                            valueStartOffset: 321
+                            valueStartOffset: 321,
+                            valueEndOffset: 328,
                         },
                         {
                             key: "can use the API to get converted values directly",
@@ -989,7 +1212,8 @@ empty string value here =
                             keyStartOffset: 329,
                             value: "true",
                             rawValue: "true\n",
-                            valueStartOffset: 379
+                            valueStartOffset: 379,
+                            valueEndOffset: 383,
                         }
                     ]
                 },
@@ -1004,7 +1228,8 @@ empty string value here =
                             keyStartOffset: 404,
                             value: "I'm a lumberjack, and I'm okay\nI sleep all night and I work all day",
                             rawValue: "I'm a lumberjack, and I'm okay\n    I sleep all night and I work all day\n",
-                            valueStartOffset: 412
+                            valueStartOffset: 412,
+                            valueEndOffset: 483,
                         }
                     ]
                 },
@@ -1019,7 +1244,8 @@ empty string value here =
                             keyStartOffset: 497,
                             value: "",
                             rawValue: "",
-                            valueStartOffset: -1
+                            valueStartOffset: -1,
+                            valueEndOffset: -1,
                         },
                         {
                             key: "empty string value here",
@@ -1027,7 +1253,8 @@ empty string value here =
                             keyStartOffset: 515,
                             value: "",
                             rawValue: "",
-                            valueStartOffset: -1
+                            valueStartOffset: -1,
+                            valueEndOffset: -1,
                         }
                     ]
                 },
@@ -1048,7 +1275,8 @@ empty string value here =
                             keyStartOffset: 826,
                             value: "True",
                             rawValue: "True\n",
-                            valueStartOffset: 850
+                            valueStartOffset: 850,
+                            valueEndOffset: 854,
                         },
                         {
                             key: "does_that_mean_anything_special",
@@ -1056,7 +1284,8 @@ empty string value here =
                             keyStartOffset: 863,
                             value: "False",
                             rawValue: "False\n",
-                            valueStartOffset: 897
+                            valueStartOffset: 897,
+                            valueEndOffset: 902,
                         },
                         {
                             key: "purpose",
@@ -1064,7 +1293,8 @@ empty string value here =
                             keyStartOffset: 911,
                             value: "formatting for readability",
                             rawValue: "formatting for readability\n",
-                            valueStartOffset: 921
+                            valueStartOffset: 921,
+                            valueEndOffset: 947,
                         },
                         {
                             key: "multiline_values",
@@ -1072,7 +1302,8 @@ empty string value here =
                             keyStartOffset: 956,
                             value: "are\nhandled just fine as\nlong as they are indented\ndeeper than the first line\nof a value",
                             rawValue: "are\n            handled just fine as\n            long as they are indented\n            deeper than the first line\n            of a value\n",
-                            valueStartOffset: 975
+                            valueStartOffset: 975,
+                            valueEndOffset: 1111,
                         }
                     ]
                 }
@@ -1202,4 +1433,42 @@ empty string value here =
         });
     });
 
+
+
+    /*
+    * TEST
+    */
+    test('Verify error: key delimiter on new line 1', () => {
+        const content = `\
+[section]
+key
+ = value`;
+        expect(() => parseInitFromString(content)).toThrow(Error("Error: Key delimiter must be on the same line as the key!"));
+    });
+
+
+
+    /*
+    * TEST
+    */
+    test('Verify error: key delimiter on new line 2', () => {
+        const content = `\
+[section]
+key
+= value`;
+        expect(() => parseInitFromString(content)).toThrow(Error("Error: Key delimiter must be on the same line as the key!"));
+    });
+
+
+    /*
+    * TEST
+    */
+    test('Verify error: key delimiter on new line 3', () => {
+        const content = `\
+[section]
+key
+ =
+  value`;
+        expect(() => parseInitFromString(content)).toThrow(Error("Error: Key delimiter must be on the same line as the key!"));
+    });
 });

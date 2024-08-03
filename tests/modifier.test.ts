@@ -356,10 +356,10 @@ other = value`;
 
 
     /*
-* TEST
-*/
-test('Padding test 6', () => {
-    const configStr = `\
+    * TEST
+    */
+    test('Padding test 6', () => {
+        const configStr = `\
 [General]
 appName            =          SimpleApp
     SimpleApp
@@ -370,7 +370,7 @@ appName            =          SimpleApp
 
 other = value`;
 
-    const expectedStr = `\
+        const expectedStr = `\
 [General]
 appName            =          ComplexApp
 
@@ -379,7 +379,135 @@ appName            =          ComplexApp
 
 other = value`;
 
-    const config = parseInitFromString(configStr);
-    expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
-});
+        const config = parseInitFromString(configStr);
+        expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
+    });
+
+
+    /*
+    * TEST
+    */
+    test('Comment test 1', () => {
+        const configStr = `\
+[General]
+appName = SimpleApp ; Comment
+
+other = value`;
+
+        const expectedStr = `\
+[General]
+appName = ComplexApp
+
+other = value`;
+
+        const config = parseInitFromString(configStr);
+        expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
+    });
+
+
+    /*
+    * TEST
+    */
+    test('Comment test 2', () => {
+        const configStr = `\
+[General]
+key = 
+    ; Comment
+    value # Comment
+
+other = value`;
+
+        const expectedStr = `\
+[General]
+key = 
+    ; Comment
+    ComplexApp
+
+other = value`;
+
+        const config = parseInitFromString(configStr);
+        expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp")).toStrictEqual(expectedStr);
+    });
+
+
+    /*
+    * TEST
+    */
+    test('Comment test 3', () => {
+        const configStr = `\
+[General]
+key = 
+    ; Comment
+    value # Comment
+    ; Different Comment
+
+other = value`;
+
+        const expectedStr = `\
+[General]
+key = 
+    ; Comment
+    ComplexApp
+    ; Different Comment
+
+other = value`;
+
+        const config = parseInitFromString(configStr);
+        expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp")).toStrictEqual(expectedStr);
+    });
+
+
+    /*
+    * TEST
+    */
+    test('Comment test 4', () => {
+        const configStr = `\
+[General]
+key = 
+    ; Comment
+    value # Comment
+    ; Different Comment
+    value2
+
+other = value`;
+
+        const expectedStr = `\
+[General]
+key = 
+    ; Comment
+    ComplexApp
+
+other = value`;
+
+        const config = parseInitFromString(configStr);
+        expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp")).toStrictEqual(expectedStr);
+    });
+
+
+    /*
+    * TEST
+    */
+    test('Comment test 5', () => {
+        const configStr = `\
+[General]
+key = 
+    ; Comment
+    value # Comment
+    ; Different Comment
+    value2
+
+other = value`;
+
+        const expectedStr = `\
+[General]
+key = 
+    ; Comment
+    ComplexApp
+    ComplexApp2
+
+other = value`;
+
+        const config = parseInitFromString(configStr);
+        expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp\nComplexApp2")).toStrictEqual(expectedStr);
+    });
 });

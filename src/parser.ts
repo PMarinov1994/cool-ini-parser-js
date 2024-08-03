@@ -129,6 +129,7 @@ const _parseInitFromString = (content: string): Configuration => {
                 currSectionEntry = {
                     keyStartOffset: i,
                     valueStartOffset: -1,
+                    valueEndOffset: -1,
                     delimiterOffset: -1,
                     key: String(currChar),
                     value: "",
@@ -170,6 +171,7 @@ const _parseInitFromString = (content: string): Configuration => {
 
                 if (hasValueStarted) {
                     currSectionEntry.rawValue += currChar;
+                    currSectionEntry.valueEndOffset = i;
                 }
 
                 if (currChar === '\n') {
@@ -182,6 +184,9 @@ const _parseInitFromString = (content: string): Configuration => {
                 if (currChar === ' ' || currChar === '\t') {
                     newLineIndentation += currChar === ' ' ? 1 : TAB_TO_SPACE_SIZE;
                     lastIndentSymbol = currChar;
+
+                } else if (SYMBOL_KEY_VALUE_SEPARATOR.includes(currChar)) {
+                    throw new Error("Error: Key delimiter must be on the same line as the key!");
 
                 } else if (currChar === SYMBOL_SECTION_START) {
                     i--; // Rowback the current symbol
@@ -243,7 +248,13 @@ const _parseInitFromString = (content: string): Configuration => {
         for (var entry of section.entries) {
             const values = entry.rawValue.split('\n');
             // Cleanup the values
-            entry.value = values.filter(v => v.trim().length > 0).map(v => v.trim()).join('\n');
+            entry.value = values
+                // Clean up white spaces
+                .map(v => v.trim())
+                // Remove empty line entries
+                .filter(v => v.length > 0)
+                // Combine the value lines
+                .join('\n');
         }
     }
 
