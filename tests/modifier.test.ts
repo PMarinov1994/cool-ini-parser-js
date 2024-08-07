@@ -510,4 +510,67 @@ other = value`;
         const config = parseInitFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp\nComplexApp2")).toStrictEqual(expectedStr);
     });
+
+
+    /*
+    * TEST
+    */
+    test('Values with new lines 1', () => {
+        const configStr = `\
+[General]
+key = value2
+
+other = value
+
+
+key2 = value2`;
+
+        const expectedStr = `\
+[General]
+key = value2
+
+other = ComplexApp
+
+
+key2 = value2`;
+
+        const config = parseInitFromString(configStr);
+        expect(modifyConfigurationSectionKey(config, "General", "other", "ComplexApp")).toStrictEqual(expectedStr);
+    });
+
+
+    /*
+    * TEST
+    */
+    test('Values with new lines 2', () => {
+        const configStr = `\
+[General]
+key = value2`;
+
+        const expectedStr = `\
+[General]
+key = ComplexApp`;
+
+        const config = parseInitFromString(configStr);
+        expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp")).toStrictEqual(expectedStr);
+    });
+
+
+    /*
+    * TEST
+    */
+    test('Values with new lines 3', () => {
+        const configStr = `\
+[General]
+key = value2
+`;
+
+        const expectedStr = `\
+[General]
+key = ComplexApp
+`;
+
+        const config = parseInitFromString(configStr);
+        expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp")).toStrictEqual(expectedStr);
+    });
 });

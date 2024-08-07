@@ -50,7 +50,7 @@ export const modifyConfigurationSectionKeyByIndex = (config: Configuration, sect
         valuePrefix = NO_VALUE_PADDING;
     }
 
-    let valueEndOffset = key.valueEndOffset;
+    let valueEndOffset = key.rawValueEndOffset;
     if (valueEndOffset === -1) {
         valueEndOffset = valueStartOffset; // We DO NOT need +1 because it is already added in the startOffset
     } else {

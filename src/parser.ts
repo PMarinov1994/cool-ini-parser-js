@@ -24,7 +24,7 @@ enum State {
 }
 
 const INVALID_PARSE_END_STATE: State[] = [
-    State.WAIT_KEY_END,
+    // State.WAIT_KEY_END,
     State.WAIT_SECTION_END
 ]
 
@@ -129,7 +129,7 @@ const _parseInitFromString = (content: string): Configuration => {
                 currSectionEntry = {
                     keyStartOffset: i,
                     valueStartOffset: -1,
-                    valueEndOffset: -1,
+                    rawValueEndOffset: -1,
                     delimiterOffset: -1,
                     key: String(currChar),
                     value: "",
@@ -171,7 +171,7 @@ const _parseInitFromString = (content: string): Configuration => {
 
                 if (hasValueStarted) {
                     currSectionEntry.rawValue += currChar;
-                    currSectionEntry.valueEndOffset = i;
+                    currSectionEntry.rawValueEndOffset = i;
                 }
 
                 if (currChar === '\n') {

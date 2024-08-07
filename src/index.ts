@@ -4,10 +4,7 @@ import { parseInitFromString } from "./parser";
 import { Section } from "./types";
 
 const testString = `\
-[General]
-appName = SampleApp
-version = 1.0.0
-author = John Doe`;
+[s]`;
 
 
 const config = parseInitFromString(testString);
@@ -20,7 +17,7 @@ for (var section of config.sections) {
 }
 
 
-const newContent = addConfigurationSectionKey(config, "General", "newKey", "newValue");
+const newContent = addConfigurationSectionKey(config, "s", "newKey", "newValue");
 
 console.log("--------");
 console.log(newContent);

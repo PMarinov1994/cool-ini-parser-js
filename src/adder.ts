@@ -25,23 +25,45 @@ export const addConfigurationSectionKeyByIndex = (config: Configuration, section
 
     let newEntryStartIndex = section.endOffset;
 
-    let keyNewLinesPrefix = "";
     let keyIndentation = 0;
     let valueIndentation = 2;
 
+    // Check if the section has keys or is empty
     if (section.entries.length !== 0) {
         const entriesLen = section.entries.length;
         const lastKeyEntry = section.entries[entriesLen - 1];
 
-        newEntryStartIndex = lastKeyEntry.valueEndOffset + 1;
-        keyNewLinesPrefix = "\n";
+        // Calculate where we need to insert the new value, based on the last key/value
+        // 1. key has a value (single line or multiline)
+        // 2. key has a delimiter ('=' or ':') but no value
+        // 3. its just a key (without delimiter)
+        if (lastKeyEntry.rawValueEndOffset !== -1) {
+            // We need to see if the value is single or multi lined.
+            const rawValueLines = lastKeyEntry.rawValue.split("\n");
+            if (rawValueLines.length === 1) {
+                // Single line value
+                newEntryStartIndex = lastKeyEntry.rawValueEndOffset + 1;
+            } else {
+                // Multiline value. Insert the new value right after the last charater of the prev value.
+                // This will preserve the new lines that where at the end of the prev value
+                let i = rawValueLines.length - 1;
+                for (; i >= 0; i--) {
+                    if (/\S/.test(rawValueLines[i])) {
+                        break;
+                    }
+                }
 
-        // if (!lastKeyEntry.rawValue.endsWith("\n")) {
-        //     // Add one new line before we append the new key/value
-        //     // if the last value is at the end of the file
-        //     keyNewLinesPrefix = "\n";
-        // }
-        
+                newEntryStartIndex = lastKeyEntry.valueStartOffset + rawValueLines.slice(0, i + 1).join('').length;
+            }
+        } else if (lastKeyEntry.delimiterOffset !== -1) {
+            // No value, only key with a delimiter. Place the new value after the delimiter
+            newEntryStartIndex = lastKeyEntry.delimiterOffset + 1;
+        } else {
+            // Just the key
+            newEntryStartIndex = lastKeyEntry.keyStartOffset + lastKeyEntry.key.length;
+        }
+
+        // Calculate indentation for the new key/value based on the last key entry
         for (let i = lastKeyEntry.keyStartOffset - 1; i > 0; i--) {
             const currChar = content.at(i);
             if (currChar === undefined) {
@@ -57,19 +79,13 @@ export const addConfigurationSectionKeyByIndex = (config: Configuration, section
             }
         }
     } else {
-        // No keys in section and section does not contain any new lines.
-        // Usually this is when the section is at the end of the file
-        for (let i = section.endOffset; i <= content.length; i++) {
+        // No keys in section.
+        // Find where the section's definition ends and insert the new key/value there
+        for (let i = 0; i <= section.endOffset; i++) {
             const currChar = content.at(i);
 
-            if (currChar === '\n') {
-                newEntryStartIndex = i + 1;
-                break;
-            }
-
-            if (currChar === undefined) {
-                newEntryStartIndex = i - 1;
-                keyNewLinesPrefix = "\n";
+            if (currChar === '\n' || currChar === undefined) {
+                newEntryStartIndex = i;
                 break;
             }
         }
@@ -82,10 +98,10 @@ export const addConfigurationSectionKeyByIndex = (config: Configuration, section
         newValue = "\n" + newValue;
     }
 
-    let newKeyValue: string = `${keyNewLinesPrefix}${" ".repeat(keyIndentation)}${key} = ${newValue}`;
+    let newKeyValue: string = `\n${" ".repeat(keyIndentation)}${key} = ${newValue}`;
 
-    const before = content.substring(0, newEntryStartIndex - 1);
-    const after = content.substring(newEntryStartIndex - 1);
+    const before = content.substring(0, newEntryStartIndex);
+    const after = content.substring(newEntryStartIndex);
 
     return before + newKeyValue + after;
 }
