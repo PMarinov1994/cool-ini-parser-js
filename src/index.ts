@@ -1,12 +1,13 @@
+import { addConfigurationSectionKey } from "./adder";
 import { modifyConfigurationSectionKey } from "./modifier";
 import { parseInitFromString } from "./parser";
 import { Section } from "./types";
 
 const testString = `\
 [General]
-key
-=
- value`;
+appName = SampleApp
+version = 1.0.0
+author = John Doe`;
 
 
 const config = parseInitFromString(testString);
@@ -19,7 +20,7 @@ for (var section of config.sections) {
 }
 
 
-const newContent = modifyConfigurationSectionKey(config, "General", "key", "ComplexApp");
+const newContent = addConfigurationSectionKey(config, "General", "newKey", "newValue");
 
 console.log("--------");
 console.log(newContent);

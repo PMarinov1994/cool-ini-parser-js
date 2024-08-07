@@ -1,7 +1,7 @@
 import { modifyConfigurationSectionKey } from "../src/modifier";
 import { parseInitFromString } from "../src/parser";
 
-describe('testing parser file', () => {
+describe('testing modifing key\'s value', () => {
     /*
     * TEST
     */
