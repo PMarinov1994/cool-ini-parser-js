@@ -1,0 +1,9 @@
+// tsconfig.build.json
+{
+    "extends": "./tsconfig",
+    "exclude": [
+        "tests/**/*.test.*",
+        "jest.config.ts",
+        "dist/**/*"
+    ],
+}

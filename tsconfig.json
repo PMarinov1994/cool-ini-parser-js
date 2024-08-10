@@ -1,11 +1,14 @@
 {
+    "exclude": ["./dist/**/*"],
     "compilerOptions": {
         "target": "ES2023",
-        "module": "CommonJS",
+        "module": "NodeNext",
+        "moduleResolution": "NodeNext",
         "declaration": true,
-        "outDir": "./dist",
+        "outDir": "./dist/esm",
         "strict": true,
         "rootDirs": ["src", "tests"],
+        "types": ["node", "jest"],
         "sourceMap": true,
     }
 }
