@@ -28,7 +28,7 @@ const INVALID_PARSE_END_STATE: State[] = [
     State.WAIT_SECTION_END
 ]
 
-const _parseInitFromString = (content: string): Configuration => {
+const _parseIniFromString = (content: string): Configuration => {
 
     const sections: Section[] = [];
 
@@ -265,8 +265,12 @@ const _parseInitFromString = (content: string): Configuration => {
     };
 }
 
-
-export const parseInitFromString = (content: string): Configuration => {
-
-    return _parseInitFromString(content);
+/**
+ * Parses a string containing INI-formatted content and converts it into a `Configuration` object.
+ *
+ * @param content - The string containing the INI-formatted data to be parsed.
+ * @returns A `Configuration` object representing the parsed INI content, including sections and key-value pairs.
+ */
+export const parseIniFromString = (content: string): Configuration => {
+    return _parseIniFromString(content);
 }

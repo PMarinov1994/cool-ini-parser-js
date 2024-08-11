@@ -1,5 +1,5 @@
-import { parseInitFromString } from "../src/parser";
-import { addConfigurationSectionKey } from "../src/adder";
+import { parseIniFromString } from "./parser";
+import { addConfigurationSectionKey } from "./adder";
 
 describe('testing adding new key/value', () => {
     /*
@@ -19,7 +19,7 @@ version = 1.0.0
 author = John Doe
 newKey = newValue`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "General", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -38,7 +38,7 @@ k = v
 newKey = newValue
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "s", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -62,7 +62,7 @@ author = John Doe
 newKey = newValue
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "General", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -88,7 +88,7 @@ newKey = newValue
 
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "s", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -106,7 +106,7 @@ appName =`;
 appName =
 newKey = newValue`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "General", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -125,7 +125,7 @@ appName =
 newKey = newValue
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "General", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -142,7 +142,7 @@ appName`;
 appName
 newKey = newValue`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "General", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -162,7 +162,7 @@ appName
 newKey = newValue
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "General", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -178,7 +178,7 @@ newKey = newValue
 [General]
 newKey = newValue`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "General", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -195,7 +195,7 @@ newKey = newValue`;
 newKey = newValue
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "General", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -211,7 +211,7 @@ newKey = newValue
 [General] ; Comment
 newKey = newValue`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "General", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -228,7 +228,7 @@ newKey = newValue`;
 newKey = newValue
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "General", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
@@ -252,7 +252,24 @@ newKey = newValue
 
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "General", "newKey", "newValue")).toStrictEqual(expectedStr);
+    });
+
+    /*
+    * TEST
+    */
+    test('Add just a key 1', () => {
+        const configStr = `\
+[General]
+key = value`;
+
+        const expectedStr = `\
+[General]
+key = value
+newKey`;
+
+        const config = parseIniFromString(configStr);
+        expect(addConfigurationSectionKey(config, "General", "newKey", "")).toStrictEqual(expectedStr);
     });
 });

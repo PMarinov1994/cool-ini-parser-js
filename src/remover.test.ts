@@ -1,5 +1,5 @@
-import { parseInitFromString } from "../src/parser";
-import { removeConfigurationSectionKey } from "../src/remover";
+import { parseIniFromString } from "./parser";
+import { removeConfigurationSectionKey } from "./remover";
 
 describe('testing removing key', () => {
     /*
@@ -17,7 +17,7 @@ author = John Doe`;
 appName = SampleApp
 author = John Doe`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(removeConfigurationSectionKey(config, "General", "version")).toStrictEqual(expectedStr);
     });
 
@@ -38,7 +38,7 @@ appName = SampleApp
 version = 1.0.0
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(removeConfigurationSectionKey(config, "General", "author")).toStrictEqual(expectedStr);
     });
 
@@ -59,7 +59,7 @@ appName = SampleApp
 version = 1.0.0
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(removeConfigurationSectionKey(config, "General", "author")).toStrictEqual(expectedStr);
     });
 
@@ -81,7 +81,7 @@ version = 1.0.0
     version = 1.0.0
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(removeConfigurationSectionKey(config, "General", "author")).toStrictEqual(expectedStr);
     });
 
@@ -111,7 +111,7 @@ version = 1.0.0
     author = John Doe
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(removeConfigurationSectionKey(config, "General", "version")).toStrictEqual(expectedStr);
     });
 });

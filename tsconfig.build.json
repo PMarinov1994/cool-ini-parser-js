@@ -2,7 +2,7 @@
 {
     "extends": "./tsconfig",
     "exclude": [
-        "tests/**/*.test.*",
+        "src/**/*.test.ts",
         "jest.config.ts",
         "dist/**/*"
     ],

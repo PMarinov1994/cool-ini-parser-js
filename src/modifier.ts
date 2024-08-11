@@ -1,7 +1,15 @@
 import { Configuration } from "./types";
 
-
-
+/**
+ * Modifies the value of an existing key within a specified section of the configuration.
+ * If the section or key does not exist, it returns `undefined`.
+ *
+ * @param config - The configuration object containing the section and key to be modified.
+ * @param section - The name of the section where the key-value pair should be modified.
+ * @param key - The key whose value is to be updated.
+ * @param newValue - The new value to be assigned to the specified key.
+ * @returns The updated content of the configuration as a string, or `undefined` if the section or key was not found.
+ */
 export const modifyConfigurationSectionKey = (config: Configuration, section: string,
     key: string, newValue: string): string | undefined => {
 
@@ -19,8 +27,16 @@ export const modifyConfigurationSectionKey = (config: Configuration, section: st
         config, config.sections.indexOf(sections[0]), sections[0].entries.indexOf(keys[0]), newValue);
 };
 
-
-
+/**
+ * Modifies the value of an existing key within a specified section of the configuration using section and key indices.
+ * If the section or key index is out of bounds, the method returns `undefined`.
+ *
+ * @param config - The configuration object containing the section and key to be modified.
+ * @param sectionIdx - The index of the section where the key-value pair should be modified.
+ * @param keyIdx - The index of the key within the section whose value is to be updated.
+ * @param newValue - The new value to be assigned to the specified key.
+ * @returns The updated content of the configuration as a string, or `undefined` if the section or key index is invalid.
+ */
 export const modifyConfigurationSectionKeyByIndex = (config: Configuration, sectionIdx: number,
     keyIdx: number, newValue: string): string | undefined => {
 

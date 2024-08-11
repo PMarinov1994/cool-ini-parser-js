@@ -1,5 +1,5 @@
-import { parseInitFromString } from "../src/parser";
-import { Configuration } from "../src/types";
+import { parseIniFromString } from "./parser";
+import { Configuration } from "./types";
 
 describe('testing parser file', () => {
     /*
@@ -10,7 +10,7 @@ describe('testing parser file', () => {
 [section]
 key = value
 \t\tvalue2`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: "\t",
             content: content,
             sections: [
@@ -43,7 +43,7 @@ key = value
 [section]
 \tkey = value
 \tkey2 = value2`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: "\t",
             content: content,
             sections: [
@@ -85,7 +85,7 @@ key = value
 [section]
   key = value
 \tkey2 = value2`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: "\t",
             content: content,
             sections: [
@@ -127,7 +127,7 @@ key = value
 [section]
 \tkey = value
   key2 = value2`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -167,7 +167,7 @@ key = value
         const content = `\
 [section]
 key = value`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -199,7 +199,7 @@ key = value`;
 [section]
 key = value
 key2 = value2`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -243,7 +243,7 @@ key = value
 
 
 `;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -277,7 +277,7 @@ key = value
 key = value   
 
 `;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -312,7 +312,7 @@ key = value
         key2 = value2
 key3 = value3`;
 
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -354,7 +354,7 @@ key3 = value3`;
         const content = `\
 [section]
 key = value # Comment`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -387,7 +387,7 @@ key = value # Comment`;
         const content = `\
 [section]
 key = value ; Comment`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -420,7 +420,7 @@ key = value ; Comment`;
         const content = `\
 [section]
 key = value ; Comment # Comment`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -454,7 +454,7 @@ key = value ; Comment # Comment`;
 key = 
     ; Comment
     value # Comment`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -490,7 +490,7 @@ key = value
 
 [section2]
 key = value`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -543,7 +543,7 @@ key1 = value1
 
 [section3]
 key2 = value2`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -609,7 +609,7 @@ key2 = value2`;
 key = value
       value2
       value3`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -643,7 +643,7 @@ key = value
 key = value
  value2
 `;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -677,7 +677,7 @@ key = value
 key = value
 value2
 `;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -720,7 +720,7 @@ value2
 key = value
  value2 = val
 `;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -755,7 +755,7 @@ key = value
  value2 = val
     key = lll
 `;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -794,7 +794,7 @@ key = value
    key2 = value
   key3 = sss
 `;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -872,7 +872,7 @@ key = value
 key2=value
   key3=vvvv
 `;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -964,7 +964,7 @@ key2=value
 [section]
 key
 key1 = value`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -1006,7 +1006,7 @@ key1 = value`;
 [section]
 key =
 key1 = value`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -1047,7 +1047,7 @@ key1 = value`;
         const content = `\
 [section]
 ; Comment`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -1109,7 +1109,7 @@ empty string value here =
             deeper than the first line
             of a value
         # Did I mention we can indent comments, too?`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -1317,7 +1317,7 @@ empty string value here =
     * TEST
     */
     test('Verify error: sections invalid symbols 1', () => {
-        expect(() => parseInitFromString(
+        expect(() => parseIniFromString(
             `[sect
             ion]`
         )).toThrow(Error("Error: Section cannot be multiline"));
@@ -1328,7 +1328,7 @@ empty string value here =
     * TEST
     */
     test('Verify error: sections invalid symbols 2', () => {
-        expect(() => parseInitFromString(
+        expect(() => parseIniFromString(
             `[sect\rion]`
         )).toThrow(Error("Error: Section name cannot contain '\r' symbol!"));
     })
@@ -1338,7 +1338,7 @@ empty string value here =
     * TEST
     */
     test('Verify error: sections invalid end', () => {
-        expect(() => parseInitFromString(
+        expect(() => parseIniFromString(
             `[section] test ; Comment`
         )).toThrow(Error("Error: After section end, no symbols are allowed"));
     })
@@ -1348,7 +1348,7 @@ empty string value here =
     * TEST
     */
     test('Verify error: no section start', () => {
-        expect(() => parseInitFromString(
+        expect(() => parseIniFromString(
             `key=value`
         )).toThrow(Error("Error: key detected outside a section!"));
     })
@@ -1357,7 +1357,7 @@ empty string value here =
     * TEST
     */
     test('Verify error: no section end', () => {
-        expect(() => parseInitFromString(
+        expect(() => parseIniFromString(
             `[secti`
         )).toThrow(Error(`Cannot end the parsing in '1' state`));
     })
@@ -1367,7 +1367,7 @@ empty string value here =
     */
     test('Verify no error: only comment 1', () => {
         const content = `; Comment`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: []
@@ -1380,7 +1380,7 @@ empty string value here =
     */
     test('Verify no error: only comment 2', () => {
         const content = `   ; Comment`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: []
@@ -1393,7 +1393,7 @@ empty string value here =
     */
     test('Verify no error: only comment 3', () => {
         const content = `\n   \n; Comment`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: []
@@ -1406,7 +1406,7 @@ empty string value here =
     */
     test('Verify no error: empty string', () => {
         const content = ``;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: []
@@ -1419,7 +1419,7 @@ empty string value here =
     */
     test('Verify no error: comment after sections end', () => {
         const content = `[section]      ; Comment`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -1443,7 +1443,7 @@ empty string value here =
 [section]
 key
  = value`;
-        expect(() => parseInitFromString(content)).toThrow(Error("Error: Key delimiter must be on the same line as the key!"));
+        expect(() => parseIniFromString(content)).toThrow(Error("Error: Key delimiter must be on the same line as the key!"));
     });
 
 
@@ -1456,7 +1456,7 @@ key
 [section]
 key
 = value`;
-        expect(() => parseInitFromString(content)).toThrow(Error("Error: Key delimiter must be on the same line as the key!"));
+        expect(() => parseIniFromString(content)).toThrow(Error("Error: Key delimiter must be on the same line as the key!"));
     });
 
 
@@ -1469,7 +1469,7 @@ key
 key
  =
   value`;
-        expect(() => parseInitFromString(content)).toThrow(Error("Error: Key delimiter must be on the same line as the key!"));
+        expect(() => parseIniFromString(content)).toThrow(Error("Error: Key delimiter must be on the same line as the key!"));
     });
 
     /*
@@ -1479,7 +1479,7 @@ key
         const content = `\
 [section]
 key`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -1511,7 +1511,7 @@ key`;
 [section]
 key
 `;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -1542,7 +1542,7 @@ key
     test('Empty section test 1', () => {
         const content = `\
 [section]`;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [
@@ -1563,7 +1563,7 @@ key
         const content = `\
 [section]
 `;
-        expect(parseInitFromString(content)).toStrictEqual<Configuration>({
+        expect(parseIniFromString(content)).toStrictEqual<Configuration>({
             indentSymbol: " ",
             content: content,
             sections: [

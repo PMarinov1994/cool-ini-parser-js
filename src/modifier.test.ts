@@ -1,5 +1,5 @@
-import { modifyConfigurationSectionKey } from "../src/modifier";
-import { parseInitFromString } from "../src/parser";
+import { modifyConfigurationSectionKey } from "./modifier";
+import { parseIniFromString } from "./parser";
 
 describe('testing modifing key\'s value', () => {
     /*
@@ -28,7 +28,7 @@ theme = dark
 language = en-US
 autoSaveInterval = 10`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "version", "2.2.2")).toStrictEqual(expectedStr);
     });
 
@@ -56,7 +56,7 @@ text = This is an updated description.
 theme = dark
 language = en-US`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "Description", "text", "This is an updated description.\nIt has multiple lines.")).toStrictEqual(expectedStr);
     });
 
@@ -87,7 +87,7 @@ theme=dark
   language  = en-US
 autoSaveInterval  = 10`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "version", "2.2.2")).toStrictEqual(expectedStr);
     });
 
@@ -106,7 +106,7 @@ appName = SampleApp`;
 appName = SampleApp
           SampleApp`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "SampleApp\nSampleApp")).toStrictEqual(expectedStr);
     });
 
@@ -125,7 +125,7 @@ appName = SampleApp
 appName = ComplexApp
                ComplexApp`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp\nComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -143,7 +143,7 @@ appName = SampleApp
 appName = ComplexApp
 \t\tComplexApp`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp\nComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -160,7 +160,7 @@ appName =`;
 [General]
 appName = ComplexApp`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -178,7 +178,7 @@ other = test`;
 appName = ComplexApp
 other = test`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -197,7 +197,7 @@ other=test`;
 appName= ComplexApp
 other=test`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -228,7 +228,7 @@ appName =
 
 other = test`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -246,7 +246,7 @@ appName =          SampleApp`;
 [General]
 appName =          ComplexApp`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -263,7 +263,7 @@ appName            =          SampleApp`;
 [General]
 appName            =          ComplexApp`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -286,7 +286,7 @@ appName            =          ComplexApp
 
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -319,7 +319,7 @@ appName            =          ComplexApp
     
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp\nComplexApp\nComplexApp\nComplexApp\nComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -350,7 +350,7 @@ appName            =          ComplexApp
 
 other = value`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp\nComplexApp\nComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -379,7 +379,7 @@ appName            =          ComplexApp
 
 other = value`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -400,7 +400,7 @@ appName = ComplexApp
 
 other = value`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "appName", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -425,7 +425,7 @@ key =
 
 other = value`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -452,7 +452,7 @@ key =
 
 other = value`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -479,7 +479,7 @@ key =
 
 other = value`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -507,7 +507,7 @@ key =
 
 other = value`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp\nComplexApp2")).toStrictEqual(expectedStr);
     });
 
@@ -534,7 +534,7 @@ other = ComplexApp
 
 key2 = value2`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "other", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -551,7 +551,7 @@ key = value2`;
 [General]
 key = ComplexApp`;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp")).toStrictEqual(expectedStr);
     });
 
@@ -570,7 +570,7 @@ key = value2
 key = ComplexApp
 `;
 
-        const config = parseInitFromString(configStr);
+        const config = parseIniFromString(configStr);
         expect(modifyConfigurationSectionKey(config, "General", "key", "ComplexApp")).toStrictEqual(expectedStr);
     });
 });

@@ -1,5 +1,14 @@
 import { Configuration } from "./types";
 
+/**
+ * Removes a key-value pair from a specified section in the configuration.
+ * If the section or key does not exist, it returns `undefined`.
+ *
+ * @param config - The configuration object from which the key-value pair will be removed.
+ * @param section - The name of the section where the key-value pair should be removed.
+ * @param key - The key to be removed from the specified section.
+ * @returns The updated content of the configuration as a string, or `undefined` if the section or key was not found.
+ */
 export const removeConfigurationSectionKey = (config: Configuration, section: string, key: string): string | undefined => {
 
     const sections = config.sections.filter(s => s.name === section);
@@ -19,7 +28,15 @@ export const removeConfigurationSectionKey = (config: Configuration, section: st
     return removeConfigurationSectionKeyByIndex(config, config.sections.indexOf(currSection), currSection.entries.indexOf(currKey));
 }
 
-
+/**
+ * Removes a key-value pair from a specified section in the configuration using section and key indices.
+ * If the section or key index is out of bounds, the method returns `undefined`.
+ *
+ * @param config - The configuration object from which the key-value pair will be removed.
+ * @param sectionIdx - The index of the section where the key-value pair should be removed.
+ * @param keyIdx - The index of the key within the section to be removed.
+ * @returns The updated content of the configuration as a string, or `undefined` if the section or key index is invalid.
+ */
 export const removeConfigurationSectionKeyByIndex = (config: Configuration, sectionIdx: number, keyIdx: number): string | undefined => {
 
     const content = config.content;

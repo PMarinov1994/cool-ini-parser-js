@@ -1,6 +1,15 @@
 import { Configuration } from "./types";
 
-
+/**
+ * Adds a key-value pair to a specified section in the configuration.
+ * If the section does not exist, it can create the section or return `undefined`.
+ *
+ * @param config - The configuration object to which the key-value pair will be added.
+ * @param section - The name of the section where the key-value pair should be added.
+ * @param key - The key to be added to the specified section.
+ * @param value - The value associated with the key.
+ * @returns The updated content of the configuration as a string, or `undefined` if the section was not found.
+ */
 export const addConfigurationSectionKey = (config: Configuration, section: string,
     key: string, value: string): string | undefined => {
 
@@ -12,7 +21,16 @@ export const addConfigurationSectionKey = (config: Configuration, section: strin
     return addConfigurationSectionKeyByIndex(config, config.sections.indexOf(sections[0]), key, value);
 }
 
-
+/**
+ * Adds a key-value pair to a specified section in the configuration using the section's index.
+ * If the index is out of bounds, the method returns `undefined`.
+ *
+ * @param config - The configuration object to which the key-value pair will be added.
+ * @param sectionIdx - The index of the section where the key-value pair should be added.
+ * @param key - The key to be added to the specified section.
+ * @param value - The value associated with the key.
+ * @returns The updated content of the configuration as a string, or `undefined` if the section index is invalid.
+ */
 export const addConfigurationSectionKeyByIndex = (config: Configuration, sectionIdx: number,
     key: string, value: string): string | undefined => {
 
@@ -92,13 +110,18 @@ export const addConfigurationSectionKeyByIndex = (config: Configuration, section
     }
 
     // construct the new value
-    const valueLines: string[] = value.split("\n");
-    let newValue: string = valueLines.length === 1 ? value : valueLines.map(v => " ".repeat(valueIndentation) + v).join("\n");
-    if (valueLines.length > 1) {
-        newValue = "\n" + newValue;
+    let newValue: string = "";
+    if (value !== "") {
+        const valueLines: string[] = value.split("\n");
+        newValue = valueLines.length === 1 ? value : valueLines.map(v => " ".repeat(valueIndentation) + v).join("\n");
+        if (valueLines.length > 1) {
+            newValue = "\n" + newValue;
+        }
+
+        newValue = " = " + newValue;
     }
 
-    let newKeyValue: string = `\n${" ".repeat(keyIndentation)}${key} = ${newValue}`;
+    let newKeyValue: string = `\n${" ".repeat(keyIndentation)}${key}${newValue}`;
 
     const before = content.substring(0, newEntryStartIndex);
     const after = content.substring(newEntryStartIndex);

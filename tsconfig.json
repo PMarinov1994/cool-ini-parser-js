@@ -3,11 +3,9 @@
     "compilerOptions": {
         "target": "ES2023",
         "module": "NodeNext",
-        "moduleResolution": "NodeNext",
         "declaration": true,
-        "outDir": "./dist/esm",
+        "outDir": "./dist",
         "strict": true,
-        "rootDirs": ["src", "tests"],
         "types": ["node", "jest"],
         "sourceMap": true,
     }
