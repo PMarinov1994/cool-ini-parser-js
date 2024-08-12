@@ -204,16 +204,16 @@ This will produce a key with value *value*
 #### Comments
 - Comments start with the symbols ';' and/or '#' and end at the end of the line.
 - Once a comment is started, it always ends at the end of the line.
-- Comments are single line only. There is not comment block symbol.
+- Comments are single line only. There is't a comment block symbol.
 ```
     ; Comment line 1
     ; Comment line 2
-    \# Comment line 3
+    # Comment line 3
     [section] ; Comment line 4
-    key = value \# Comment line 5
-    \# Comment ; line 6
+    key = value # Comment line 5
+    # Comment ; line 6
     key2 = value
-    ; Comment \# line 7
+    ; Comment # line 7
     key3 = value
 ```
 - Every symbol after the comment symbol is ignored by the parser.
