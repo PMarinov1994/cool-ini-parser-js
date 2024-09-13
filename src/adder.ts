@@ -99,7 +99,7 @@ export const addConfigurationSectionKeyByIndex = (config: Configuration, section
     } else {
         // No keys in section.
         // Find where the section's definition ends and insert the new key/value there
-        for (let i = 0; i <= section.endOffset; i++) {
+        for (let i = section.startOffset; i <= section.endOffset; i++) {
             const currChar = content.at(i);
 
             if (currChar === '\n' || currChar === undefined) {

@@ -87,11 +87,79 @@ newKey = newValue
 ; Comment
 
 `;
+    });
+
+    /*
+    * TEST
+    */
+    test('Add new key 5', () => {
+        const configStr = `\
+
+[s]
+
+`;
+
+        const expectedStr = `\
+
+[s]
+newKey = newValue
+
+`;
 
         const config = parseIniFromString(configStr);
         expect(addConfigurationSectionKey(config, "s", "newKey", "newValue")).toStrictEqual(expectedStr);
     });
 
+    /*
+    * TEST
+    */
+    test('Add new key 6', () => {
+        const configStr = `\
+[k]
+k = v
+
+[s]
+
+`;
+
+        const expectedStr = `\
+[k]
+k = v
+
+[s]
+newKey = newValue
+
+`;
+    });
+
+    /*
+    * TEST
+    */
+    test('Add new key 7', () => {
+        const configStr = `\
+
+
+[k]
+k = v
+
+[s]
+
+`;
+
+        const expectedStr = `\
+
+
+[k]
+k = v
+
+[s]
+newKey = newValue
+
+`;
+
+        const config = parseIniFromString(configStr);
+        expect(addConfigurationSectionKey(config, "s", "newKey", "newValue")).toStrictEqual(expectedStr);
+    });
 
     /*
     * TEST

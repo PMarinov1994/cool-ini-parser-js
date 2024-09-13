@@ -20,7 +20,8 @@ const config: Config = {
   ],
 
   testPathIgnorePatterns: [
-    "/node_modules/"
+    "/node_modules/",
+    "/dist/"
   ],
 };
 

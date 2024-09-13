@@ -224,6 +224,12 @@ on the same line as a value, which is going to change, will be lost. Values that
 inbetween their lines will also lose their comments.
 
 ## Changelog
+#### v1.1.2
+- Bugfix: Adding new key would always be inserted into the first section, instead of the target section.
+
+#### v1.1.1
+- Update README.md
+
 #### v1.1.0
 - Rename method *parseInitFromString* to *parseIniFromString*
 - Reorganize repository structure
